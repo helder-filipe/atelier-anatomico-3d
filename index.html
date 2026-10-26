@@ -158,4 +158,5 @@ $('screenshot')?.addEventListener('click',()=>{renderer.render(scene,camera);con
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/Math.max(1,h);camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(stage);resize();update();function frame(){requestAnimationFrame(frame);orbit.update();renderer.render(scene,camera)}frame();
 const badge=document.createElement('div');badge.style.cssText='position:absolute;right:20px;top:64px;z-index:4;padding:7px 10px;background:#14344be0;color:#c9eaff;border:1px solid #3980a6;border-radius:8px;font-size:11px';badge.textContent='Figura articulada experimental · estudo de proporções';stage.append(badge);
 </script>
+<script type="module" src="./model-workspace.js"></script>
 </body></html>
