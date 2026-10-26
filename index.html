@@ -104,7 +104,7 @@ function pivot(name,parent,x,y,z){const g=new THREE.Group();g.position.set(x,y,z
 const torso=pivot('Coluna lombar',root,0,1.21,0);
 ell(torso,skinmat,[0,.51,0],[.35,.65,.225]);ell(torso,skinmat,[0,.27,-.012],[.265,.31,.205]);
 tapered(torso,skinmat,[-.16,.78,0],[.16,.78,0],.24,.24,1);
-const pelvis=pivot('Pelve',root,0,1.11,0);ell(pelvis,skinmat,[0,-.04,0],[.29,.19,.22]);ell(pelvis,boneMat,[0,0,-.03],[.27,.14,.08]);
+const pelvis=pivot('Pelve',root,0,1.5,0);ell(pelvis,skinmat,[0,-.04,0],[.29,.19,.22]);ell(pelvis,boneMat,[0,0,-.03],[.27,.14,.08]);
 for(const s of [-1,1]){
  const sh=pivot(s<0?'Ombro esquerdo':'Ombro direito',torso,s*.345,.88,0);
  ell(sh,skinmat,[s*.04,-.13,0],[.145,.27,.145],-s*.1);
@@ -148,7 +148,7 @@ const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();canvas.addEventListe
 for(const [id,axis] of [['jointX','x'],['jointY','y'],['jointZ','z']])$(id).addEventListener('input',()=>{if(selected)selected.g.rotation[axis]=THREE.MathUtils.degToRad(+$ (id).value);$(id+'Value').textContent=$(id).value+'°';});
 $('jointReset').onclick=()=>{if(selected)selected.g.rotation.set(0,0,0);choose(selected)};
 $('allReset').onclick=()=>{for(const j of joints)j.g.rotation.set(0,0,0);choose(selected)};
-function update(){for(const [key,id] of [['skin','skin'],['bones','bones'],['muscles','muscles']])groups[key].visible=$(id)?.checked??true;
+function update(){root.traverse(o=>{if(o.isMesh){if(o.material===skinmat)o.visible=$('skin')?.checked??true;else if(o.material===boneMat)o.visible=$('bones')?.checked??false;else if(o.material===muscleMat)o.visible=$('muscles')?.checked??false;}});
 skinmat.opacity=(+$('opacity')?.value||100)/100;skinmat.transparent=skinmat.opacity<1;skinmat.depthWrite=skinmat.opacity>.95;
 const azi=THREE.MathUtils.degToRad(+$('azimuth')?.value||35),el=THREE.MathUtils.degToRad(+$('elevation')?.value||45);sun.position.set(Math.sin(azi)*5,Math.sin(el)*5,Math.cos(azi)*5);sun.intensity=(+$('intensity')?.value||100)/55;ambient.intensity=(+$('ambient')?.value||65)/90;sun.color.set(({white:'#ffffff',warm:'#ffe1b8',cool:'#bfdcff'})[$('temperature')?.value]||'#ffffff');outline.visible=$('grid')?.checked??true;}
 document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',update));
