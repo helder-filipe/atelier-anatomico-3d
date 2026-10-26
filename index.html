@@ -4,6 +4,11 @@
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Atelier Anatómico 3D — Estúdio de Referência</title>
 <style>
+/* Pose editor v2 */
+#poseOverlay{position:absolute;bottom:58px;left:16px;z-index:5;max-width:310px;background:#111b28ed;border:1px solid #527087;padding:13px;border-radius:11px;font-size:12px;color:#e8f5ff}
+#poseOverlay h3{font-size:13px;margin:0 0 6px}#poseOverlay button{background:#294558;color:#fff;border:1px solid #4e7b94;border-radius:7px;padding:8px;margin-top:6px;cursor:pointer}
+#poseOverlay input{width:100%}
+
 :root{font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#e9edf4;background:#0b0e13}*{box-sizing:border-box}body{margin:0;overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}#app{display:grid;grid-template-columns:292px 1fr 295px;grid-template-rows:63px minmax(0,1fr);height:100dvh}header{grid-column:1/-1;background:#121720;border-bottom:1px solid #273040;display:flex;align-items:center;justify-content:space-between;padding:0 22px;gap:14px}h1{font-size:17px;letter-spacing:-.4px;margin:0}header .sub{font-size:11px;color:#8995a8;display:block;margin-top:3px}header .tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#a6c7e4;border:1px solid #385063;border-radius:50px;padding:7px 11px}aside{background:#121720;overflow-y:auto;padding:18px 17px;scrollbar-width:thin;scrollbar-color:#334153 transparent}#left{border-right:1px solid #273040}#right{border-left:1px solid #273040}.section{padding-bottom:19px;margin-bottom:20px;border-bottom:1px solid #253042}.section:last-child{border:0}.section h2{font-size:11px;color:#92a6bf;text-transform:uppercase;letter-spacing:.14em;margin:0 0 14px}.field{margin:13px 0}.field label,.labelrow{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#d8e0e9;margin-bottom:7px}.value{color:#9baec5;font-size:11px;font-variant-numeric:tabular-nums}select{width:100%;background:#202937;color:#ecf0f5;border:1px solid #39485b;padding:10px;border-radius:8px;outline:none}input[type=range]{width:100%;accent-color:#91c8df;cursor:pointer}input[type=color]{background:transparent;border:0;width:36px;height:30px;cursor:pointer}.btnset{display:grid;grid-template-columns:1fr 1fr;gap:8px}.btnset.three{grid-template-columns:repeat(3,1fr)}.btn{background:#202a39;border:1px solid #3a4a5e;color:#dce6f2;padding:10px 7px;border-radius:8px;font-size:12px;transition:.15s}.btn:hover{background:#304055}.btn.active{border-color:#9ad5e9;color:#c4edff;background:#253f50}.btn.primary{background:#baddec;color:#14232d;border-color:#baddec;font-weight:650}.layer{display:flex;align-items:center;justify-content:space-between;padding:9px 0;font-size:13px;border-bottom:1px solid #202a36}.layer input{accent-color:#91c8df;width:17px;height:17px}.layer small{display:block;color:#7f91a5;font-size:10px;margin-top:3px}.layer span{display:flex;flex-direction:column}.layer.disabled{opacity:.5}#stage{position:relative;min-width:0;background:radial-gradient(ellipse at 52% 34%,#283341 0,#131b24 55%,#0e131b 100%)}canvas{width:100%;height:100%;display:block;touch-action:none}#hud{position:absolute;left:19px;top:18px;display:flex;gap:8px;pointer-events:none;flex-wrap:wrap}.pill{font-size:11px;letter-spacing:.04em;padding:7px 10px;border:1px solid #405065;background:#111923b8;border-radius:30px;color:#b9cede}#instructions{position:absolute;bottom:20px;left:0;right:0;text-align:center;color:#abbacc;font-size:11px;pointer-events:none;text-shadow:0 2px 7px #000}#status{position:absolute;top:20px;right:18px;background:#101923c9;border:1px solid #344255;border-radius:7px;font-size:11px;padding:8px 10px;color:#b9cddd;max-width:190px}.swatch{display:flex;gap:10px;align-items:center}.hint{font-size:11px;color:#94a3b6;line-height:1.55}.toggle{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:12px;gap:8px}.toggle input{accent-color:#91c8df;width:17px;height:17px}.keyline{height:1px;background:#273241;margin:16px 0}.note{background:#1b2934;border:1px solid #37516a;color:#b6cadb;border-radius:9px;padding:11px;line-height:1.5;font-size:11px}.foot{font-size:10px;color:#7e8d9e;line-height:1.6}#error{position:absolute;inset:10px;display:none;place-items:center;background:#111e2b;color:#fff;padding:25px;text-align:center;z-index:10}body.compact #app{grid-template-columns:255px 1fr 255px}@media(max-width:1050px){#app{grid-template-columns:235px 1fr 240px}aside{padding:15px 11px}header{padding:0 12px}}@media(max-width:740px){body{overflow:auto}#app{height:auto;min-height:100dvh;grid-template-columns:1fr;grid-template-rows:60px 55dvh auto auto}header{grid-column:1}#stage{grid-row:2}#left{grid-row:3;border-right:0;border-top:1px solid #273040}#right{grid-row:4;border-left:0;border-top:1px solid #273040}aside{overflow:visible;padding:22px}#instructions{bottom:12px}header .tag{display:none}}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"}}</script>
@@ -73,4 +78,84 @@ $('presetSkin').onclick=()=>{$('skin').checked=true;$('bones').checked=false;$('
 $('screenshot').onclick=()=>{renderer.render(scene,activeCamera);const a=document.createElement('a');a.href=renderer.domElement.toDataURL('image/png');a.download='atelier-anatomico-3d-'+$('focus').value+'.png';a.click()};
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();const aspect=w/h,span=4.45;ortho.left=-span*aspect/2;ortho.right=span*aspect/2;ortho.top=span/2;ortho.bottom=-span/2;ortho.updateProjectionMatrix()}new ResizeObserver(resize).observe(stage);resize();applyView();$('status').textContent='Modelo 3D pronto · Arrasta para explorar';let t=0;function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,activeCamera);t++}animate();
 }catch(err){console.error(err);document.getElementById('error').style.display='grid';document.getElementById('status').textContent='Erro no motor 3D'}
-</script></body></html>
+</script>
+<script type="module">
+/* Figure replacement: anatomically proportioned articulated construction study.
+   Operates as an independent stage, keeps original drawing controls accessible. */
+import * as THREE from 'https://esm.sh/three@0.160.1';
+import {OrbitControls} from 'https://esm.sh/three@0.160.1/examples/jsm/controls/OrbitControls.js';
+const stage=document.querySelector('#stage');if(!stage)throw new Error('Stage unavailable');
+const canvas=document.createElement('canvas');canvas.id='figureRigCanvas';canvas.style.cssText='position:absolute;inset:0;width:100%;height:100%;z-index:2;touch-action:none';
+stage.append(canvas);
+const panel=document.createElement('div');panel.id='poseOverlay';panel.innerHTML='<h3>Pose anatómica · editor de articulações</h3><div id="jointName">Seleciona uma articulação azul</div><label>Flexão / extensão <span id="jointXValue">0°</span></label><input id="jointX" type="range" min="-150" max="150" value="0"><label>Abdução / adução <span id="jointZValue">0°</span></label><input id="jointZ" type="range" min="-150" max="150" value="0"><label>Rotação <span id="jointYValue">0°</span></label><input id="jointY" type="range" min="-180" max="180" value="0"><button id="jointReset">Repor articulação</button> <button id="allReset">Pose neutra</button><div style="opacity:.65;margin-top:6px">Roda a vista com o rato e seleciona as articulações no modelo.</div>';stage.append(panel);
+const $=id=>document.getElementById(id);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#17212d');
+const camera=new THREE.PerspectiveCamera(40,1,.03,100);camera.position.set(3,2.4,6.8);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.shadowMap.enabled=true;
+const orbit=new OrbitControls(camera,canvas);orbit.target.set(0,1.5,0);orbit.enableDamping=true;orbit.minDistance=.55;orbit.maxDistance=20;
+const ambient=new THREE.HemisphereLight(0xffffff,0x58677d,1);scene.add(ambient);const sun=new THREE.DirectionalLight(0xffffff,2.2);scene.add(sun);
+const mat=(color,roughness=.82)=>new THREE.MeshStandardMaterial({color,roughness,side:THREE.DoubleSide});
+const skinmat=mat('#bd9480'),boneMat=mat('#e3dbc5'),muscleMat=mat('#ab4d4b'),jointMat=new THREE.MeshBasicMaterial({color:0x53cdf2,depthTest:false});
+const root=new THREE.Group();scene.add(root);const groups={skin:new THREE.Group(),bones:new THREE.Group(),muscles:new THREE.Group()};Object.values(groups).forEach(g=>root.add(g));
+const joints=[],clickables=[];
+function ell(parent,m,pos,size,rot){const mesh=new THREE.Mesh(new THREE.SphereGeometry(1,32,20),m);mesh.position.set(...pos);mesh.scale.set(...size);if(rot)mesh.rotation.z=rot;parent.add(mesh);return mesh}
+function tapered(parent,m,a,b,rA,rB,depth=.9){const p=new THREE.Vector3(...a),q=new THREE.Vector3(...b),d=q.clone().sub(p),mid=p.clone().add(q).multiplyScalar(.5);const mesh=new THREE.Mesh(new THREE.CylinderGeometry(rB,rA,d.length(),20,1),m);mesh.position.copy(mid);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.clone().normalize());mesh.scale.z=depth;parent.add(mesh);return mesh}
+function pivot(name,parent,x,y,z){const g=new THREE.Group();g.position.set(x,y,z);parent.add(g);const h=ell(g,jointMat,[0,0,.15],[.045,.045,.045]);h.renderOrder=20;h.userData.joint=g;h.userData.name=name;clickables.push(h);joints.push({name,g});return g}
+const torso=pivot('Coluna lombar',root,0,1.21,0);
+ell(torso,skinmat,[0,.51,0],[.35,.65,.225]);ell(torso,skinmat,[0,.27,-.012],[.265,.31,.205]);
+tapered(torso,skinmat,[-.16,.78,0],[.16,.78,0],.24,.24,1);
+const pelvis=pivot('Pelve',root,0,1.11,0);ell(pelvis,skinmat,[0,-.04,0],[.29,.19,.22]);ell(pelvis,boneMat,[0,0,-.03],[.27,.14,.08]);
+for(const s of [-1,1]){
+ const sh=pivot(s<0?'Ombro esquerdo':'Ombro direito',torso,s*.345,.88,0);
+ ell(sh,skinmat,[s*.04,-.13,0],[.145,.27,.145],-s*.1);
+ tapered(sh,skinmat,[0,-.05,0],[s*.08,-.44,0],.153,.125);
+ tapered(sh,boneMat,[0,-.08,0],[s*.08,-.43,0],.039,.034);
+ ell(sh,muscleMat,[s*.05,-.17,.112],[.118,.215,.055],-s*.2);
+ const el=pivot(s<0?'Cotovelo esquerdo':'Cotovelo direito',sh,s*.08,-.45,0);
+ tapered(el,skinmat,[0,0,0],[s*.045,-.40,.02],.115,.075);
+ tapered(el,boneMat,[0,-.02,0],[s*.04,-.37,0],.025,.02);
+ ell(el,muscleMat,[s*.019,-.13,.078],[.078,.155,.045]);
+ const wrist=pivot(s<0?'Punho esquerdo':'Punho direito',el,s*.045,-.41,.02);
+ ell(wrist,skinmat,[0,-.13,.005],[.095,.17,.038]);
+ for(let finger=0;finger<4;finger++)tapered(wrist,skinmat,[(finger-1.5)*.041,-.23,.01],[(finger-1.5)*.044,-.39+Math.abs(finger-1.5)*.028,.01],.019,.013);
+ tapered(wrist,skinmat,[s*.095,-.15,0],[s*.17,-.25,.02],.038,.018);
+ const hip=pivot(s<0?'Anca esquerda':'Anca direita',pelvis,s*.19,-.1,0);
+ tapered(hip,skinmat,[0,-.03,0],[s*.045,-.67,.045],.21,.125);
+ ell(hip,skinmat,[s*.013,-.20,-.015],[.17,.28,.165],-s*.07);
+ tapered(hip,boneMat,[0,-.05,0],[s*.04,-.65,0],.043,.042);
+ ell(hip,muscleMat,[s*.015,-.26,.13],[.13,.29,.055]);
+ const knee=pivot(s<0?'Joelho esquerdo':'Joelho direito',hip,s*.045,-.69,.045);
+ ell(knee,skinmat,[0,0,.045],[.12,.115,.12]);ell(knee,boneMat,[0,0,.13],[.08,.07,.035]);
+ tapered(knee,skinmat,[0,-.05,0],[0,-.68,-.045],.135,.074);
+ ell(knee,muscleMat,[0,-.20,-.075],[.09,.23,.06]);
+ tapered(knee,boneMat,[0,-.07,0],[0,-.64,-.045],.031,.021);
+ const ankle=pivot(s<0?'Tornozelo esquerdo':'Tornozelo direito',knee,0,-.69,-.045);
+ ell(ankle,skinmat,[0,-.075,.13],[.115,.09,.245]);
+}
+const neck=pivot('Pescoço',torso,0,1.11,0);
+tapered(neck,skinmat,[0,-.025,0],[0,.22,0],.1,.115);
+const head=pivot('Cabeça',neck,0,.27,0);
+ell(head,skinmat,[0,.175,0],[.206,.278,.19]);ell(head,skinmat,[0,-.056,.054],[.154,.124,.146]);
+ell(head,skinmat,[0,.052,.21],[.057,.1,.082]); // nose bridge
+for(const s of [-1,1]){ell(head,skinmat,[s*.205,.09,0],[.032,.072,.048]);ell(head,skinmat,[s*.118,-.013,.123],[.087,.052,.079]);ell(head,boneMat,[s*.11,.12,0],[.108,.155,.137]);ell(head,muscleMat,[s*.085,-.07,.13],[.088,.075,.036]);}
+ell(head,boneMat,[0,.19,0],[.187,.245,.174]);ell(head,muscleMat,[0,.24,-.01],[.18,.18,.07]);
+for(const s of [-1,1]){ell(torso,muscleMat,[s*.17,.83,.16],[.175,.23,.075],s*.16);ell(torso,muscleMat,[s*.19,.35,.14],[.10,.27,.058]);}
+for(let i=0;i<4;i++)for(const s of [-1,1])ell(torso,muscleMat,[s*.088,.62-i*.115,.205],[.078,.053,.032]);
+for(let i=0;i<13;i++)ell(torso,boneMat,[0,.2+i*.073,-.115],[.04,.034,.045]);
+const outline=new THREE.GridHelper(10,20,0x57697a,0x33404c);scene.add(outline);
+let selected=null;function choose(j){selected=j;$('jointName').textContent=j?j.name:'Seleciona uma articulação azul';for(const [id,axis] of [['jointX','x'],['jointZ','z'],['jointY','y']]){$(id).value=j?Math.round(THREE.MathUtils.radToDeg(j.g.rotation[axis])):0;$(id+'Value').textContent=$(id).value+'°';}}
+const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();canvas.addEventListener('pointerup',e=>{const box=canvas.getBoundingClientRect();pointer.set((e.clientX-box.left)/box.width*2-1,-((e.clientY-box.top)/box.height*2-1));ray.setFromCamera(pointer,camera);const hit=ray.intersectObjects(clickables,false)[0];if(hit)choose(joints.find(j=>j.g===hit.object.userData.joint));});
+for(const [id,axis] of [['jointX','x'],['jointY','y'],['jointZ','z']])$(id).addEventListener('input',()=>{if(selected)selected.g.rotation[axis]=THREE.MathUtils.degToRad(+$ (id).value);$(id+'Value').textContent=$(id).value+'°';});
+$('jointReset').onclick=()=>{if(selected)selected.g.rotation.set(0,0,0);choose(selected)};
+$('allReset').onclick=()=>{for(const j of joints)j.g.rotation.set(0,0,0);choose(selected)};
+function update(){for(const [key,id] of [['skin','skin'],['bones','bones'],['muscles','muscles']])groups[key].visible=$(id)?.checked??true;
+skinmat.opacity=(+$('opacity')?.value||100)/100;skinmat.transparent=skinmat.opacity<1;skinmat.depthWrite=skinmat.opacity>.95;
+const azi=THREE.MathUtils.degToRad(+$('azimuth')?.value||35),el=THREE.MathUtils.degToRad(+$('elevation')?.value||45);sun.position.set(Math.sin(azi)*5,Math.sin(el)*5,Math.cos(azi)*5);sun.intensity=(+$('intensity')?.value||100)/55;ambient.intensity=(+$('ambient')?.value||65)/90;sun.color.set(({white:'#ffffff',warm:'#ffe1b8',cool:'#bfdcff'})[$('temperature')?.value]||'#ffffff');outline.visible=$('grid')?.checked??true;}
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',update));
+document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{const dirs={front:[0,1.7,6],side:[6,1.7,0],back:[0,1.7,-6],three:[4,2.1,5],top:[0,7,.02],bottom:[0,-3,4]};camera.position.set(...(dirs[b.dataset.view]||dirs.front));orbit.target.set(0,1.5,0);orbit.update();}));
+$('focus')?.addEventListener('change',()=>{const v=$('focus').value;const targets={body:[0,1.55,6],head:[0,2.83,1.2],bust:[0,2.45,2.5],torso:[0,2.0,3],hands:[.5,1.45,1.1],legs:[0,.72,2.9]};const [x,y,d]=targets[v]||targets.body;orbit.target.set(x,y,0);camera.position.set(x,y+.15,d);orbit.update();});
+$('screenshot')?.addEventListener('click',()=>{renderer.render(scene,camera);const a=document.createElement('a');a.download='pose-anatomica.png';a.href=canvas.toDataURL();a.click()});
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/Math.max(1,h);camera.updateProjectionMatrix()}new ResizeObserver(resize).observe(stage);resize();update();function frame(){requestAnimationFrame(frame);orbit.update();renderer.render(scene,camera)}frame();
+const badge=document.createElement('div');badge.style.cssText='position:absolute;right:20px;top:64px;z-index:4;padding:7px 10px;background:#14344be0;color:#c9eaff;border:1px solid #3980a6;border-radius:8px;font-size:11px';badge.textContent='Figura articulada experimental · estudo de proporções';stage.append(badge);
+</script>
+</body></html>
